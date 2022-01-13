@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+<h1>Привет, я Главный Тут</h1>
+<p>И я сделал всё это.<br>
+  Не то чтобы это большой повод для гордости, потому "это" с маленькой буквы.<br>
+  Но это пока!
+</p>
+<ul class="list-group list-group-flush">
+  А теперь немножечко обо мне:
+  <li class="list-group-item">
+    Мой github: 
+    <a
+      href="https://github.com/Tacostrophe"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      туть
+    </a>
+  </li>
+  <li class="list-group-item">
+    Моё резюме: в разработке
+  </li>
+</ul>
+<p>
+  Мне сказали, что хорошим тоном считается выложить фотографию
+   своей рабочей кружки или образцового порядка на рабочем столе.
+   Ну так вот порядка нет.
+</p>
+<div>
+  <img
+    src="{% static 'img/my_cup.jpg' %}"
+    width="200"
+    height="150"
+    class="mx-auto d-block"
+  >
+</div>
+{% endblock %}

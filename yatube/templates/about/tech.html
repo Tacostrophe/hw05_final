@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Технологии{% endblock %}
+{% block content %}
+<div class="row">
+  <h1>Вот что я умею</h1>
+  <aside class="col-12 col-md-3">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <a
+          href="https://www.python.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="{% static 'img/python_logo.jpeg' %}"
+            width="30"
+            height="30"
+          >
+      </a>
+        Python
+      </li>
+      <li class="list-group-item">
+        <a
+          href="https://www.djangoproject.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img          
+            src="{% static 'img/django_logo.png' %}"
+            width="30"
+            height="30"
+          >
+        </a>
+        Django
+      </li>
+    </ul>
+  </aside>
+  <article class="col-12 col-md-9">
+    <p>
+      На данный момент мне особо нечего рассказать про технологии, используемые тут.
+       Но я рассчитываю пополнять этот раздел по мере продвижения. Хочется верить, что
+       этот раздел когда-то станет интересным
+    </p>
+  </article>
+</div>
+{% endblock %}
