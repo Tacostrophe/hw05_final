@@ -67,6 +67,8 @@ class PostsURLTests(TestCase):
             self.url_post: HTTPStatus.OK,
             self.url_post_edit: HTTPStatus.FOUND,
             URL_CREATE: HTTPStatus.FOUND,
+            URL_FOLLOW_INDEX: HTTPStatus.FOUND,
+            self.url_add_comment: HTTPStatus.FOUND,
             '/unexisting_page/': HTTPStatus.NOT_FOUND,
         }
         for adress, status in adresses_statuses.items():
@@ -115,6 +117,8 @@ class PostsURLTests(TestCase):
             self.url_post: 'posts/post_detail.html',
             self.url_post_edit: 'posts/create_post.html',
             URL_CREATE: 'posts/create_post.html',
+            URL_FOLLOW_INDEX: 'posts/follow.html',
+
         }
         for adress, template in adresses_templates.items():
             with self.subTest(adress=adress):

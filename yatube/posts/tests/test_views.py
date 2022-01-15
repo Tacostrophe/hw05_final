@@ -4,6 +4,7 @@ import tempfile
 from django.conf import settings
 from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db import IntegrityError
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django import forms
@@ -315,14 +316,6 @@ class PostsCacheTests(TestCase):
 
     def setUp(self):
         self.guest_client = Client()
-        self.user_follower = User.objects.create_user(username='followfull')
-        self.user_not_follower = User.objects.create_user(
-            username='followless'
-        )
-        self.follower = Client()
-        self.follower.force_login(self.user_follower)
-        self.not_follower = Client()
-        self.not_follower.force_login(self.user_not_follower)
         self.post = Post.objects.create(
             author=PostsCacheTests.author,
             text='another text',
@@ -340,35 +333,61 @@ class PostsCacheTests(TestCase):
         response = self.guest_client.get(the_reverse)
         self.assertNotContains(response, self.post.text)
 
+
+class FollowViewsTests(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.author = User.objects.create_user(username='auth')
+        Post.objects.create(
+            author=cls.author,
+            text='just a text',
+        )
+
+    def setUp(self):
+        self.guest_client = Client()
+        self.user_follower = User.objects.create_user(username='followfull')
+        self.user_not_follower = User.objects.create_user(
+            username='followless'
+        )
+        self.follower = Client()
+        self.follower.force_login(self.user_follower)
+        self.not_follower = Client()
+        self.not_follower.force_login(self.user_not_follower)
+        self.post = Post.objects.create(
+            author=FollowViewsTests.author,
+            text='another text',
+        )
+
     def test_authorized_can_follow_unfollow(self):
         '''Авторизованный пользователь может подписываться и отписываться'''
         self.follower.get(reverse(
             'posts:profile_follow',
-            kwargs={'username': PostsCacheTests.author.username}
+            kwargs={'username': FollowViewsTests.author.username}
         ))
         self.assertTrue(Follow.objects.filter(
             user=self.user_follower
         ).filter(
-            author=PostsCacheTests.author
+            author=FollowViewsTests.author
         ).exists())
         self.follower.get(reverse(
             'posts:profile_unfollow',
-            kwargs={'username': PostsCacheTests.author.username}
+            kwargs={'username': FollowViewsTests.author.username}
         ))
         self.assertFalse(Follow.objects.filter(
             user=self.user_follower
         ).filter(
-            author=PostsCacheTests.author
+            author=FollowViewsTests.author
         ).exists())
 
     def test_follower_see_new_post(self):
         '''Новый пост появляется в ленте только подписчиков'''
         Follow.objects.create(
             user=self.user_follower,
-            author=PostsCacheTests.author,
+            author=FollowViewsTests.author,
         )
         new_post = Post.objects.create(
-            author=PostsCacheTests.author,
+            author=FollowViewsTests.author,
             text='Following test text',
         )
         follower_response = self.follower.get(reverse('posts:follow_index'))
@@ -379,3 +398,25 @@ class PostsCacheTests(TestCase):
         not_follower_posts = not_follower_response.context['page_obj']
         self.assertIn(new_post, follower_posts)
         self.assertNotIn(new_post, not_follower_posts)
+
+    # возможно этому тесту место в test_models
+    def test_follower_cant_follow_itself(self):
+        '''Пользователь не может подписаться на себя'''
+        with self.assertRaises(IntegrityError):
+            Follow.objects.create(
+                user=self.user_follower,
+                author=self.user_follower,
+            )
+
+    # возможно этому тесту место в test_models
+    def test_cant_follow_twice(self):
+        '''Нельзя подписаться больше одного раза'''
+        with self.assertRaises(IntegrityError):
+            Follow.objects.create(
+                user=self.user_follower,
+                author=FollowViewsTests.author,
+            )
+            Follow.objects.create(
+                user=self.user_follower,
+                author=FollowViewsTests.author,
+            )
