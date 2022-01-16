@@ -15,7 +15,7 @@
           <form method="post" enctype="multipart/form-data">
             <div class="form-group row my-3 p-3">
               <label for="id_text">
-                Текст поста                  
+                {{form.text.label}}                  
                 <span class="required text-danger" >*</span>                  
               </label>
               {% csrf_token %}       

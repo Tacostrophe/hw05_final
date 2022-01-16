@@ -5,7 +5,7 @@
   <aside class="col-12 col-md-3">
     <ul class="list-group list-group-flush">
       <li class="list-group-item">
-        Дата публикации: {{ post.pub_date|date:"d.m.Y" }}
+        Дата публикации: {{ post.created|date:"d.m.Y" }}
       </li>
       {% if post.group.slug is not None %}
         <li class="list-group-item">
@@ -40,10 +40,8 @@
         Редактировать пост
       </a>
     {% endif %}
-  </article>
-  {% load user_filters %}
-
-  {% if user.is_authenticated %}
+    {% load user_filters %}
+    {% if user.is_authenticated %}
     <div class="card my-4">
       <h5 class="card-header">Добавить комментарий:</h5>
       <div class="card-body">
@@ -56,23 +54,24 @@
         </form>
       </div>
     </div>
-  {% endif %}
-  {% if comments %}
+    {% endif %}
+    {% if comments %}
     {% for comment in comments %}
-      <div class="media mb-4">
-        <div class="media-body">
-          <h5 class="mt-0">
-            <a href="{% url 'posts:profile' comment.author.username %}">
-              {{ comment.author.username }}
-            </a>
-          </h5>
-          <p>{{ comment.created }}</p>  
-          <p>
-            {{ comment.text }}
-          </p>
-        </div>
+    <div class="media mb-4">
+      <div class="media-body">
+        <h5 class="mt-0">
+          <a href="{% url 'posts:profile' comment.author.username %}">
+            {{ comment.author.username }}
+          </a>
+        </h5>
+        <p>{{ comment.created }}</p>  
+        <p>
+          {{ comment.text }}
+        </p>
       </div>
+    </div>
     {% endfor %}
-  {% endif %}
+    {% endif %}
+  </article>
 </div>
 {% endblock %}
