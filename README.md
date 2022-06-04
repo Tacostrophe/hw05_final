@@ -35,4 +35,4 @@ python yatube/manage.py migrate
 python yatube/manage.py runserver
 ```
 
-<sub>Всегда рад замечаниям и советам</sub>
+<sub>Всегда рад замечаниям и советам:*</sub>
