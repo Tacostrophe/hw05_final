@@ -11,26 +11,36 @@
 - подписка на авторов.
 
 ### Инструкция по развертыванию
+
+Клонировать репозиторий:
+
+```
+git clone https://github.com/Tacostrophe/hw05_final.git
+```
 Все нижеперечисленные действия выполнять из hw05_final/
 
-Создание виртуального окружения:
+В репозитории создать и активировать виртуальное окружение:
 ```
 python3 -m venv /path/to/new/virtual/environment
 ```
-Активация виртуального окружения:
 ```
 source /path/to/new/virtual/environment/bin/activate
 ```
-Установка необходимых пакетов:
+
+Установить зависимости из файла requirements.txt:
+
 ```
-pip install -r /path/to/requirements.txt
+python3 -m pip install --upgrade pip
 ```
-Миграции:
+
 ```
-python yatube/manage.py makemigrations
+pip install -r requirements.txt
+```
+Выполнить миграции:
+```
 python yatube/manage.py migrate
 ```
-Запуск сервера:
+Запуск проекта:
 ```
 python yatube/manage.py runserver
 ```
